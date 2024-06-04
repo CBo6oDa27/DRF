@@ -5,6 +5,7 @@ from materials.apps import MaterialsConfig
 from materials.views import (CourseViewSet, LessonCreateApiView,
                              LessonDestroyApiView, LessonListApiView,
                              LessonRetrieveApiView, LessonUpdateApiView)
+from users.permissons import IsModerator, IsOwner
 
 app_name = MaterialsConfig.name
 
