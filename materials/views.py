@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson
+from materials.paginators import ClassesPaginator
 from materials.serializers import (CourseDetailSerializer, CourseSerializer,
                                    LessonSerializer)
 from users.permissions import IsModerator, IsOwner
@@ -12,6 +13,7 @@ from users.permissions import IsModerator, IsOwner
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
+    pagination_class = ClassesPaginator
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -47,8 +49,10 @@ class LessonCreateApiView(CreateAPIView):
 class LessonListApiView(ListAPIView):
     """Модератор может видеть все уроки, остальные пользователи только те,
     у которых они владельцы"""
+
     serializer_class = LessonSerializer
     permission_classes = (IsAuthenticated,)
+    pagination_class = ClassesPaginator
 
     def get_queryset(self):
         if IsModerator().has_permission(self.request, self):
@@ -72,4 +76,4 @@ class LessonUpdateApiView(UpdateAPIView):
 class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsAuthenticated, IsOwner, ~IsModerator)
+    permission_classes = (IsAuthenticated, IsOwner | ~IsModerator)

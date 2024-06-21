@@ -1,0 +1,16 @@
+Found 7 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+https://www.youtube.com/watch?v=g-I5-m5jYvE
+URL является допустимым URL youtube.com
+../Users/alexeyzakirov/PycharmProjects/DRF/.venv/lib/python3.12/site-packages/rest_framework/pagination.py:208: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'materials.models.Lesson'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+{'count': 1, 'next': None, 'previous': None, 'results': [{'id': 4, 'name': 'TestLesson', 'description': 'TestDescription', 'preview': None, 'video_url': None, 'course': 3, 'owner': 3}]}
+..https://www.youtube.com/watch?v=g-I5-m5jYvE
+URL является допустимым URL youtube.com
+...
+----------------------------------------------------------------------
+Ran 7 tests in 0.103s
+
+OK
+Destroying test database for alias 'default'...
