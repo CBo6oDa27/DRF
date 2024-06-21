@@ -13,6 +13,8 @@ from materials.models import Course
 from users.models import Payments, Subscription, User
 from users.serialyzers import (PaymentSerializer, SubscriptionSerializer,
                                UserSerializer)
+from users.services import (convert_rub_to_dollars, create_stripe_price,
+                            create_stripe_product, create_stripe_session)
 
 
 class PaymentViewSet(ModelViewSet):
@@ -72,3 +74,19 @@ class SubscriptionAPIView(APIView):
             message = f"подписка на курс {course_item.name} добавлена"
             sub.save()
         return Response({"message": message})
+
+
+class PaymentCreateAPIView(CreateAPIView):
+    serializer_class = PaymentSerializer
+    queryset = Payments.objects.all()
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        stripe_product_id = create_stripe_product(payment)
+        amount_in_dollars = convert_rub_to_dollars(payment.amount)
+        price = create_stripe_price(amount_in_dollars, stripe_product_id)
+        session_id, payment_link = create_stripe_session(price)
+
+        payment.session_id = session_id
+        payment.payment_link = payment_link
+        payment.save()

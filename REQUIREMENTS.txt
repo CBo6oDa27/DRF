@@ -5,3 +5,7 @@ python-dotenv==1.0.1
 pillow
 django-filter
 djangorestframework-simplejwt==5.3.1
+drf-yasg
+setuptools
+stripe
+forex-python
