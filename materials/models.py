@@ -28,6 +28,9 @@ class Course(models.Model):
         verbose_name="Владелец"
     )
 
+    def __str__(self):
+        return f'{self.name}'
+
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
