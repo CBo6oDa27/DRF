@@ -9,3 +9,6 @@ drf-yasg
 setuptools
 stripe
 forex-python
+celery
+redis
+django-celery-beat

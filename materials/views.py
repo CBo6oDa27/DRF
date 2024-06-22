@@ -1,6 +1,6 @@
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+                                     UpdateAPIView, get_object_or_404)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -9,6 +9,7 @@ from materials.paginators import ClassesPaginator
 from materials.serializers import (CourseDetailSerializer, CourseSerializer,
                                    LessonSerializer)
 from users.permissions import IsModerator, IsOwner
+from materials.tasks import notificator_subscription_update
 
 
 class CourseViewSet(ModelViewSet):
@@ -24,6 +25,12 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+    def update(self, request, *args, **kwargs):
+        course = get_object_or_404(Course, pk=kwargs['pk'])
+        notificator_subscription_update.delay(course_id=course.id)
+        print(f'Курс {course.name} обновлён')
+        return super().update(request)
 
     def get_permissions(self):
         if self.action in ["create", "destroy"]:

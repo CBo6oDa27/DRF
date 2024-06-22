@@ -36,5 +36,10 @@ urlpatterns = [
         SubscriptionAPIView.as_view(),
         name="subscriptions_create",
     ),
+    path(
+        "subscriptions/update/",
+        SubscriptionAPIView.as_view(),
+        name="subscriptions_update",
+    ),
     path("payment/create/", PaymentCreateAPIView.as_view(), name="payment_create"),
 ] + router.urls
