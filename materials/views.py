@@ -27,9 +27,9 @@ class CourseViewSet(ModelViewSet):
         course.save()
 
     def update(self, request, *args, **kwargs):
-        course = get_object_or_404(Course, pk=kwargs['pk'])
-        notificator_subscription_update.delay(course_id=course.id)
-        print(f'Курс {course.name} обновлён')
+        course = Course.objects.filter(pk=kwargs['pk']).first()
+        if course:
+            notificator_subscription_update.delay(course_id=course.id)
         return super().update(request)
 
     def get_permissions(self):
