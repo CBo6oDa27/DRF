@@ -12,3 +12,4 @@ forex-python
 celery
 redis
 django-celery-beat
+coverage
